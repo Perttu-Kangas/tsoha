@@ -1,0 +1,8 @@
+# Intellij
+.idea/
+*.iml
+*.iws
+
+.env
+__pycache__
+venv
