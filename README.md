@@ -12,3 +12,4 @@ Sovelluksen ominaisuuksia:
 * Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
 * Ylläpitäjä voi lisätä ja poistaa keskustelualueita.
 * Ylläpitäjä voi luoda salaisen alueen ja määrittää, keillä käyttäjillä on pääsy alueelle.
+* todo lisää ominaisuuksia, jos aikaa jää
