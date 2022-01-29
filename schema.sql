@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    name TEXT UNIQUE,
+    username TEXT UNIQUE,
     password TEXT,
     -- role: 0 = user, 1 = admin
     role INTEGER
