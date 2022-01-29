@@ -1,6 +1,10 @@
+import users
+from db import db
+
+
 # THREADS START
 
-def create_new_thread(title, message):
+def create_new_thread(title, message, hidden):
     print("messages create_new_thread")
     # todo
 
@@ -23,13 +27,20 @@ def delete_thread(thread_id):
 # MESSAGES START
 
 def create_new_message(thread_id, message):
-    print("messages create_new_message")
-    # todo
+    user_id = users.user_id()
+    if user_id == 0:
+        return False
+    sql = "INSERT INTO messages(thread_id, sender_id, sent_at, message) " \
+          "VALUES (:thread_id, :sender_id, NOW(), :message)"
+    db.session.execute(sql, {"thread_id": thread_id, "sender_id": user_id, "message": message})
+    db.session.commit()
+    return True
 
 
 def get_messages(thread_id):
-    print("messages get_messages")
-    # todo
+    sql = "SELECT sender_id, sent_at, message " \
+          "FROM messages WHERE thread_id=:thread_id"
+    return db.session.execute(sql, {"thread_id": thread_id})
 
 
 def edit_message(message_id, new_context):
