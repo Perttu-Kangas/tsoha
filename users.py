@@ -43,7 +43,7 @@ def user_id():
     return session.get("user_id", 0)
 
 
-def get_user_role():
+def user_role():
     return session.get("user_role", 0)
 
 
