@@ -3,6 +3,10 @@
 *.iml
 *.iws
 
+# Python
 .env
 __pycache__
 venv
+
+# Private
+private.txt
