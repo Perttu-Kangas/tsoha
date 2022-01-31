@@ -6,17 +6,23 @@ CREATE TABLE users (
     role INTEGER
 );
 
-CREATE TABLE threads (
+CREATE TABLE sections (
     id SERIAL PRIMARY KEY,
     name TEXT,
     -- hidden: 0 = false, 1 = true
     hidden INTEGER
 );
 
-CREATE TABLE hidden_threads_access (
+CREATE TABLE sections_access (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users,
-    thread_id INTEGER REFERENCES threads
+    section_id INTEGER REFERENCES sections,
+    user_id INTEGER REFERENCES users
+)
+
+CREATE TABLE threads (
+    id SERIAL PRIMARY KEY,
+    section_id INTEGER REFERENCES sections,
+    name TEXT
 );
 
 CREATE TABLE messages (

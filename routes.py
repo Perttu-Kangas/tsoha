@@ -1,3 +1,8 @@
+from app import app
+from flask import render_template, request, redirect
+import messages
+
+
 def index():
     print("routes index")
     # todo

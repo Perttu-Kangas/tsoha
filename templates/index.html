@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<hr>
+{% for section in sections %}
+<a href="/section/{{ section.id }}">{{ section.name }}</a> <br>
+Ketjuja yhteensä: {{ section.threads }} <br>
+Viestejä yhteensä: {{ section.messages }} <br>
+Viimeisin viesti: {{ section.lastmessage }} <br>
+<hr>
+{% endfor %}
+
+{% if session.user_role == 1 %}
+<a href="/new_section">Luo uusi alue</a>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form action="/new_section" method="POST">
+    <p>Aihe:<br>
+        <input type="text" name="section_name" minlength="1" maxlength="100"></p>
+    <p>Piilotettu alue:<br>
+        <input type="checkbox" id="hidden" name="hidden" value="1">
+        <label for="hidden">Piilotettu alue</label><br>
+        <textarea name="access">Nimi1, nimi2, nimi3, jne.</textarea></p>
+    <input type="submit" value="Luo alue">
+</form>
+
+<p>
+    <a href="/">Palaa takaisin</a>
+
+{% endblock %}
