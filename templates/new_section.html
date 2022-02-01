@@ -9,9 +9,11 @@
         <label for="hidden">Piilotettu alue</label><br>
         <textarea name="access">Nimi1, nimi2, nimi3, jne.</textarea></p>
     <input type="submit" value="Luo alue">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 
 <p>
-    <a href="/">Palaa takaisin</a>
+    <a href="/">Palaa etusivulle</a>
 
 {% endblock %}

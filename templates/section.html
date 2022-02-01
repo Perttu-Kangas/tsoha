@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<hr>
+{% for thread in threads %}
+<a href="/thread/{{ thread.id }}">{{ thread.name }}</a> <br>
+Ketjussa viestejä: {{ thread.messages }} <br>
+Viimeisin viesti: {{ thread.lastmessage }} <br>
+<hr>
+{% endfor %}
+
+<a href="/new_thread">Luo uusi ketju</a>
+
+<p>
+    <a href="/">Palaa etusivulle</a>
+
+{% endblock %}

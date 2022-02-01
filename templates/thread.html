@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<hr>
+{% for message in messages %}
+Viesti: {{ message.message }} <br>
+Lähettäjä: {{ message.sender }} <br>
+Aika: {{ message.sent_at }} <br>
+<hr>
+{% endfor %}
+
+<form action="/new_message" method="POST">
+    <p>Viesti:<br>
+        <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea></p>
+    <input type="submit" value="Lähetä viesti">
+
+    <input ty    pe="hidden" name="thread_id" value="{{ thread_id }}">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+
+<p>
+    <a href="/">Palaa etusivulle</a>
+
+{% endblock %}
