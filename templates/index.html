@@ -1,17 +1,41 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<hr>
-{% for section in sections %}
-<a href="/section/{{ section.id }}">{{ section.name }}</a> <br>
-Ketjuja yhteensä: {{ section.threads }} <br>
-Viestejä yhteensä: {{ section.messages }} <br>
-Viimeisin viesti: {{ section.lastmessage }} <br>
-<hr>
-{% endfor %}
+<div class="gray_background">
+    <div class="site_content">
+        {% for section in sections %}
+        <div class="box">
+            <div class="box_title">
+                <a href="/section/{{ section[0] }}">{{ section[1] }}</a>
+            </div>
+            <div class="box_content">
+                Ketjuja yhteensä: {{ section[2] }} <br>
+                Viestejä yhteensä: {{ section[3] }} <br>
+                Viimeisin viesti: {{ section[4] }} <br>
+            </div>
+        </div>
+        {% endfor %}
 
-{% if session.user_role == 1 %}
-<a href="/new_section">Luo uusi alue</a>
-{% endif %}
+        {% if session.user_role == 1 %}
+        <div class="box">
+            <div class="box_title">
+                Luo uusi alue
+            </div>
+            <div class="box_content">
+                <form action="/new_section" method="POST">
+                    Aihe: <input type="text" name="section_name" minlength="1" maxlength="100"> <br>
+                    Piilotettu alue: <input type="checkbox" id="hidden" name="hidden" value="1"> <br>
+                    Piilotetulle alueelle pääsy: <br>
+                    <textarea name="access" rows="4" cols="50">Nimi1, nimi2, nimi3, jne.</textarea> <br>
+                    <input type="submit" value="Luo alue">
+
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
 
 {% endblock %}

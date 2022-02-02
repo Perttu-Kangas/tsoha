@@ -1,33 +1,10 @@
 from app import app
 from flask import render_template, request, redirect
-import messages
 
 
+@app.route("/")
 def index():
-    print("routes index")
-    # todo
+    sections = "list todo"
+    # 0 = id, 1 = name, 2 = threads, 3 = messages, 4 = last message
+    return render_template("index.html", sections=sections)
 
-
-def create_new_thread():
-    print("routes create_new_thread")
-    # todo
-
-
-def create_new_message():
-    print("routes create_new_message")
-    # todo
-
-
-def register():
-    print("routes register")
-    # todo
-
-
-def login():
-    print("routes login")
-    # todo
-
-
-def logout():
-    print("routes logout")
-    # todo
