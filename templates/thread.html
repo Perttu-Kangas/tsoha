@@ -14,8 +14,7 @@ Aika: {{ message.sent_at }} <br>
         <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea></p>
     <input type="submit" value="Lähetä viesti">
 
-    <input ty    pe="hidden" name="thread_id" value="{{ thread_id }}">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <input type="hidden" name="thread_id" value="{{ thread_id }}">
 </form>
 
 <p>
