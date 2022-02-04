@@ -56,8 +56,17 @@ input[type=text] {
     color: rgb(150, 150, 150);
 }
 
+input[type=password] {
+    color: rgb(150, 150, 150);
+}
+
 input[type=submit] {
     background-color: orange;
     text-decoration: none;
+    cursor: pointer;
+    border: none;
+}
+
+summary {
     cursor: pointer;
 }

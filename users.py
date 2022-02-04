@@ -16,6 +16,7 @@ def register(username, password, role):
         db.session.execute(sql, {"username": username, "password": hash_value, "role": role})
         db.session.commit()
     except:
+        # Most likely same username already exists...
         return False
     return login(username, password)
 
