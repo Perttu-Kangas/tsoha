@@ -7,50 +7,49 @@
     <link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 
-<div class="gray_background">
-    <div class="site_content">
-        <div class="box">
-            {% if session.user_id %}
-            <div class="box_title">
-                {% if session.user_role == 1 %}
-                Olet kirjautunut sisään ylläpitäjänä.
-                {% else %}
-                Olet kirjautunut sisään käyttäjänä.
-                {% endif %}
-            </div>
-            <div class="box_content">
-                <a href="/logout">Kirjaudu ulos</a>
-            </div>
+<div class="site_content">
+    <div class="box">
+        {% if session.user_id %}
+        <div class="box_title">
+            {% if session.user_role == 1 %}
+            Olet kirjautunut sisään ylläpitäjänä.
             {% else %}
-            <div class="box_title">
-                Kirjaudu sisään
-            </div>
-            <div class="box_content">
-                <form action="/login" method="POST">
+            Olet kirjautunut sisään käyttäjänä.
+            {% endif %}
+        </div>
+        <div class="box_content">
+            <a href="/logout">Kirjaudu ulos</a>
+        </div>
+        {% else %}
+        <div class="box_title">
+            Kirjaudu sisään
+        </div>
+        <div class="box_content">
+            <form action="/login" method="POST">
+                Käyttäjänimi: <br>
+                <input type="text" name="username" minlength="4" maxlength="20"> <br>
+                Salasana: <br>
+                <input type="password" name="password" minlength="8" maxlength="40"> <br>
+                <input type="submit" value="Kirjaudu">
+            </form>
+            <details>
+                <summary>
+                    Jos sinulla ei ole tunnusta, voit luoda sen klikkaamalla minua.
+                </summary>
+                <form action="/register" method="POST">
                     Käyttäjänimi: <br>
                     <input type="text" name="username" minlength="4" maxlength="20"> <br>
                     Salasana: <br>
-                    <input type="password" name="password" minlength="8" maxlength="40"> <br>
-                    <input type="submit" value="Kirjaudu">
+                    <input type="password" name="password1" minlength="8" maxlength="40"> <br>
+                    Salasana uudestaan: <br>
+                    <input type="password" name="password2" minlength="8" maxlength="40"> <br>
+                    Tee minusta ylläpitäjä: <input type="checkbox" name="role" value="1"> <br>
+                    <input type="submit" value="Luo tunnus">
                 </form>
-                <details>
-                    <summary>
-                        Jos sinulla ei ole tunnusta, voit luoda sen klikkaamalla minua.
-                    </summary>
-                    <form action="/register" method="POST">
-                        Käyttäjänimi: <br>
-                        <input type="text" name="username" minlength="4" maxlength="20"> <br>
-                        Salasana: <br>
-                        <input type="password" name="password1" minlength="8" maxlength="40"> <br>
-                        Salasana uudestaan: <br>
-                        <input type="password" name="password2" minlength="8" maxlength="40"> <br>
-                        Tee minusta ylläpitäjä: <input type="checkbox" name="role" value="1"> <br>
-                        <input type="submit" value="Luo tunnus">
-                    </form>
-                </details>
-            </div>
-            {% endif %}
+            </details>
         </div>
+        {% endif %}
     </div>
 </div>
+
 {% block content %}{% endblock %}

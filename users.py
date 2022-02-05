@@ -35,6 +35,13 @@ def login(name, password):
     return True
 
 
+def get_id_by_name(username):
+    sql = "SELECT id FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+    return -1 if not user else user[0]
+
+
 def logout():
     del session["user_id"]
     del session["user_role"]
@@ -46,6 +53,11 @@ def user_id():
 
 def user_role():
     return session.get("user_role", 0)
+
+
+def require_role(role):
+    if role < user_role():
+        abort(403)
 
 
 def check_csrf():

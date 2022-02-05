@@ -1,40 +1,43 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="gray_background">
-    <div class="site_content">
-        {% for section in sections %}
-        <div class="box">
-            <div class="box_title">
-                <a href="/section/{{ section[0] }}">{{ section[1] }}</a>
-            </div>
-            <div class="box_content">
-                Ketjuja yhteensä: {{ section[2] }} <br>
-                Viestejä yhteensä: {{ section[3] }} <br>
-                Viimeisin viesti: {{ section[4] }} <br>
-            </div>
+<div class="site_content">
+    {% for section in sections %}
+    <div class="box">
+        <div class="box_title">
+            <a href="/section/{{ section[0] }}">{{ section[1] }}</a>
         </div>
-        {% endfor %}
-
-        {% if session.user_role == 1 %}
-        <div class="box">
-            <div class="box_title">
-                Luo uusi alue
-            </div>
-            <div class="box_content">
-                <form action="/new_section" method="POST">
-                    Aihe: <br>
-                    <input type="text" name="section_name" minlength="1" maxlength="100"> <br>
-                    Piilotettu alue: <input type="checkbox" id="hidden" name="hidden" value="1"> <br>
-                    Piilotetulle alueelle pääsy: <br>
-                    <textarea name="access" rows="4" cols="50">Nimi1, nimi2, nimi3, jne.</textarea> <br>
-                    <input type="submit" value="Luo alue">
-                </form>
-            </div>
+        <div class="box_content">
+            Ketjuja yhteensä: {{ section[2] }}
+            {% if session.user_role == 1 and section[3] == 1 %}
+            <br>
+            <form action="/add_user_to_section" method="POST">
+                Käyttäjä: <br>
+                <input type="text" name="username" minlength="4" maxlength="20"> <br>
+                <input type="hidden" name="section_id" value="{{ section[0] }}">
+                <input type="submit" value="Lisää käyttäjälle oikeus alueelle">
+            </form>
+            {% endif %}
         </div>
-        {% endif %}
-
     </div>
+    {% endfor %}
+
+    {% if session.user_role == 1 %}
+    <div class="box">
+        <div class="box_title">
+            Luo uusi alue
+        </div>
+        <div class="box_content">
+            <form action="/new_section" method="POST">
+                Aihe: <br>
+                <input type="text" name="section_name" minlength="4" maxlength="100"> <br>
+                Piilotettu alue: <input type="checkbox" name="hidden_section" value="1"> <br>
+                Piilotetulle alueelle voi lisätä käyttäjiä sen luomisen jälkeen. <br>
+                <input type="submit" value="Luo alue">
+            </form>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}
