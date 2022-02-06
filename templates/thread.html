@@ -1,23 +1,37 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<hr>
-{% for message in messages %}
-Viesti: {{ message.message }} <br>
-Lähettäjä: {{ message.sender }} <br>
-Aika: {{ message.sent_at }} <br>
-<hr>
-{% endfor %}
 
-<form action="/new_message" method="POST">
-    <p>Viesti:<br>
-        <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea></p>
-    <input type="submit" value="Lähetä viesti">
+<div class="site_content">
+    <div class="box">
+        <div class="box_title">
+            Ketjun viestit
+        </div>
+        <div class="box_content">
+            {% for message in messages %}
+            {{ message[2] }}
+            <br>
+            Lähettäjä {{ message[0] }}, {{ message[1] }}
+            <br><br>
+            {% endfor %}
+        </div>
+    </div>
 
-    <input type="hidden" name="thread_id" value="{{ thread_id }}">
-</form>
+    <div class="box">
+        <div class="box_title">
+            Lähetä uusi viesti
+        </div>
+        <div class="box_content">
+            <form action="/new_message" method="POST">
+                Viesti: <br>
+                <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea>
+                <input type="hidden" name="section_id" value="{{ section_id }}">
+                <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                <input type="submit" value="Lähetä">
+            </form>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a href="/">Palaa etusivulle</a>
 
 {% endblock %}

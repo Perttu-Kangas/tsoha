@@ -1,17 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<hr>
-{% for thread in threads %}
-<a href="/thread/{{ thread.id }}">{{ thread.name }}</a> <br>
-Ketjussa viestejä: {{ thread.messages }} <br>
-Viimeisin viesti: {{ thread.lastmessage }} <br>
-<hr>
-{% endfor %}
 
-<a href="/new_thread">Luo uusi ketju</a>
+<div class="site_content">
+    {% for thread in threads %}
+    <div class="box">
+        <div class="box_title">
+            <a href="/section/{{ section_id }}/thread/{{ thread[0] }}">{{ thread[1] }}</a>
+        </div>
+        <div class="box_content">
+            Viestejä yhteensä: {{ thread[2] }}
+        </div>
+    </div>
+    {% endfor %}
 
-<p>
-    <a href="/">Palaa etusivulle</a>
+    <div class="box">
+        <div class="box_title">
+            Luo uusi ketju
+        </div>
+        <div class="box_content">
+            <form action="/new_thread" method="POST">
+                Aihe: <br>
+                <input type="text" name="thread_name" minlength="4" maxlength="100"> <br>
+                Aloitusviesti: <br>
+                <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea>
+                <input type="hidden" name="section_id" value="{{ section_id }}">
+                <input type="submit" value="Luo ketju">
+            </form>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

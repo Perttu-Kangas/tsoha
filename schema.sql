@@ -19,11 +19,12 @@ CREATE TABLE sections_access (
     id SERIAL PRIMARY KEY,
     section_id INTEGER REFERENCES sections,
     user_id INTEGER REFERENCES users
-)
+);
 
 CREATE TABLE threads (
     id SERIAL PRIMARY KEY,
     section_id INTEGER REFERENCES sections,
+    creator_id INTEGER REFERENCES users,
     name TEXT
 );
 

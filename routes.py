@@ -2,6 +2,8 @@ from app import app
 from flask import render_template, request, redirect
 import users
 import sections
+import threads
+import messages
 
 
 @app.route("/")
@@ -9,7 +11,75 @@ def index():
     return render_template("index.html", sections=sections.get_sections())
 
 
+# MESSAGE ROUTES START
+
+
+@app.route("/section/<int:section_id>/thread/<int:thread_id>")
+def thread(section_id, thread_id):
+    # todo: check permission
+
+    return render_template("thread.html", messages=messages.get_messages(thread_id),
+                           section_id=section_id, thread_id=thread_id)
+
+
+@app.route("/new_message", methods=["post"])
+def new_message():
+
+    if not users.is_logged_in():
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään luodakseen ketjun")
+
+    message = request.form["message"]
+
+    if len(message) < 1 or len(message) > 2000:
+        return render_template("error.html", message="Viestin tulee olla 1-2000 merkkiä")
+
+    section_id = request.form["section_id"]
+    thread_id = request.form["thread_id"]
+    # todo: check permission
+
+    sender_id = users.user_id()
+    messages.new_message(thread_id, sender_id, message)
+
+    return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id))
+
+
+# THREAD ROUTES START
+
+
+@app.route("/section/<int:section_id>")
+def section(section_id):
+    # todo: check permission
+
+    return render_template("section.html", threads=threads.get_threads(section_id), section_id=section_id)
+
+
+@app.route("/new_thread", methods=["post"])
+def new_thread():
+
+    if not users.is_logged_in():
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään luodakseen ketjun")
+
+    thread_name = request.form["thread_name"]
+
+    if len(thread_name) < 4 or len(thread_name) > 100:
+        return render_template("error.html", message="Ketjun nimen tulee olla 4-100 merkkiä")
+
+    starting_message = request.form["message"]
+
+    if len(starting_message) < 1 or len(starting_message) > 2000:
+        return render_template("error.html", message="Viestin tulee olla 1-2000 merkkiä")
+
+    section_id = request.form["section_id"]
+    # todo: check permission
+
+    sender_id = users.user_id()
+    thread_id = threads.new_thread(section_id, sender_id, thread_name)
+    messages.new_message(thread_id, sender_id, starting_message)
+
+    return redirect("/section/" + str(section_id))
+
 # SECTION ROUTES START
+
 
 @app.route("/new_section", methods=["post"])
 def new_section():
