@@ -25,6 +25,6 @@ Sovelluksen edistyminen:
 Tekemättä:
 * Käyttäjä voi muokata luomansa ketjun otsikkoa sekä lähettämänsä viestin sisältöä. Käyttäjä voi myös poistaa ketjun tai viestin.
 * Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
-* Paljon pienempiä muutoksia ja optimointeja SQL käskyissä
+* Paljon pienempiä muutoksia QOL ja optimointeja SQL käskyissä
 
-Sovellus ei ole vielä testattavissa.
+Sovellus on testattavissa [Herokussa](https://hytsoha-keskustelusovellus.herokuapp.com/)
