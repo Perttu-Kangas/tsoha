@@ -73,10 +73,11 @@ def new_thread():
     # todo: check permission
 
     sender_id = users.user_id()
-    thread_id = threads.new_thread(section_id, sender_id, thread_name)
+    thread_id = threads.new_thread(section_id, sender_id, thread_name)[0]
     messages.new_message(thread_id, sender_id, starting_message)
 
     return redirect("/section/" + str(section_id))
+
 
 # SECTION ROUTES START
 
