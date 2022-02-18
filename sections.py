@@ -23,8 +23,8 @@ def get_sections():
     sql = "SELECT S.id, S.name, " \
           "(SELECT COUNT(T.id) FROM threads T WHERE S.id=T.section_id), S.hidden " \
           "FROM sections S " \
-          "WHERE S.hidden=0 OR " + str(user_role) + "=1 OR " + str(user_id) + \
+          "WHERE S.hidden=0 OR :user_role=1 OR :user_id" + \
           " IN (SELECT SA.user_id FROM sections_access SA WHERE SA.section_id=S.id)"
-    result = db.session.execute(sql)
+    result = db.session.execute(sql, {"user_role": user_role, "user_id": user_id})
 
     return result.fetchall()
