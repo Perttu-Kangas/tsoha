@@ -34,6 +34,7 @@
                 Piilotettu alue: <input type="checkbox" name="hidden_section" value="1"> <br>
                 Piilotetulle alueelle voi lisätä käyttäjiä sen luomisen jälkeen. <br>
                 <input type="submit" value="Luo alue">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
         </div>
     </div>

@@ -26,7 +26,9 @@ def thread(section_id, thread_id):
 def new_message():
 
     if not users.is_logged_in():
-        return render_template("error.html", message="Täytyy olla kirjautunut sisään luodakseen ketjun")
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään lähettääkseen viestin")
+
+    users.check_csrf()
 
     message = request.form["message"]
 
@@ -59,6 +61,8 @@ def new_thread():
     if not users.is_logged_in():
         return render_template("error.html", message="Täytyy olla kirjautunut sisään luodakseen ketjun")
 
+    users.check_csrf()
+
     thread_name = request.form["thread_name"]
 
     if len(thread_name) < 4 or len(thread_name) > 100:
@@ -85,18 +89,14 @@ def new_thread():
 @app.route("/new_section", methods=["post"])
 def new_section():
     users.require_role(1)
+    users.check_csrf()
 
     section_name = request.form["section_name"]
 
     if len(section_name) < 4 or len(section_name) > 100:
         return render_template("error.html", message="Alueen nimen tulee olla 4-100 merkkiä")
 
-    hidden_section = request.form.get("hidden_section")
-    if hidden_section:
-        # 1 = hidden
-        hidden_section = 1
-    else:
-        hidden_section = 0
+    hidden_section = 1 if request.form.get("hidden_section") else 0
 
     sections.new_section(section_name, hidden_section)
 
@@ -162,13 +162,7 @@ def register():
     if len(password1) > 40 or len(password1) < 8:
         return render_template("error.html", message="Salasanan tulee olla 8-40 merkkiä")
 
-    role = request.form.get("role")
-    if role:
-        # Admin
-        role = 1
-    else:
-        # User
-        role = 0
+    role = 1 if request.form.get("role") else 0
 
     if not users.register(username, password1, role):
         return render_template("error.html", message="Rekisteröinti ei onnistunut")

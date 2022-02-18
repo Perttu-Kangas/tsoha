@@ -26,6 +26,7 @@
                 <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea>
                 <input type="hidden" name="section_id" value="{{ section_id }}">
                 <input type="submit" value="Luo ketju">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
         </div>
     </div>
