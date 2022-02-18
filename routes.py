@@ -16,7 +16,8 @@ def index():
 
 @app.route("/section/<int:section_id>/thread/<int:thread_id>")
 def thread(section_id, thread_id):
-    # todo: check permission
+    if not users.has_view_permission(section_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
 
     return render_template("thread.html", messages=messages.get_messages(thread_id),
                            section_id=section_id, thread_id=thread_id)
@@ -37,7 +38,9 @@ def new_message():
 
     section_id = request.form["section_id"]
     thread_id = request.form["thread_id"]
-    # todo: check permission
+
+    if not users.has_view_permission(section_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
 
     sender_id = users.user_id()
     messages.new_message(thread_id, sender_id, message)
@@ -50,7 +53,8 @@ def new_message():
 
 @app.route("/section/<int:section_id>")
 def section(section_id):
-    # todo: check permission
+    if not users.has_view_permission(section_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
 
     return render_template("section.html", threads=threads.get_threads(section_id), section_id=section_id)
 
@@ -74,7 +78,9 @@ def new_thread():
         return render_template("error.html", message="Viestin tulee olla 1-2000 merkkiä")
 
     section_id = request.form["section_id"]
-    # todo: check permission
+
+    if not users.has_view_permission(section_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
 
     sender_id = users.user_id()
     thread_id = threads.new_thread(section_id, sender_id, thread_name)[0]

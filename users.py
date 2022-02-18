@@ -64,6 +64,42 @@ def require_role(role):
         abort(403)
 
 
+def has_view_permission(section_id):
+    if user_role() > 0:
+        # Admin
+        return True
+
+    sql = "SELECT S.id FROM sections S " \
+          "WHERE S.id=:section_id AND (S.hidden=0 OR :user_id IN " \
+          "(SELECT SA.user_id FROM sections_access SA WHERE SA.section_id=S.id))"
+    result = db.session.execute(sql, {"section_id": section_id, "user_id": user_id()})
+    return not result.fetchone()
+
+
+def has_section_edit_permission():
+    return user_role() > 0
+
+
+def has_thread_edit_permission(thread_id):
+    if user_role() > 0:
+        # Admin
+        return True
+
+    sql = "SELECT id FROM threads WHERE id=:thread_id AND creator_id=:user_id"
+    result = db.session.execute(sql, {"thread_id": thread_id, "user_id": user_id()})
+    return not result.fetchone()
+
+
+def has_message_edit_permission(message_id):
+    if user_role() > 0:
+        # Admin
+        return True
+
+    sql = "SELECT id FROM messages WHERE id=:message_id AND sender_id=:user_id"
+    result = db.session.execute(sql, {"message_id": message_id, "user_id": user_id()})
+    return not result.fetchone()
+
+
 def check_csrf():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
