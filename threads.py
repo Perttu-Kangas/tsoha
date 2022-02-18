@@ -4,6 +4,8 @@ from db import db
 import users
 import messages
 
+# ROUTING START
+
 
 @app.route("/section/<int:section_id>")
 def section(section_id):
@@ -43,6 +45,9 @@ def new_thread():
     return redirect("/section/" + str(section_id))
 
 
+# ROUTING END
+
+
 def sql_new_thread(section_id, creator_id, name):
     sql = "INSERT INTO threads (section_id, creator_id, name) " \
           "VALUES (:section_id, :creator_id, :name) RETURNING id"
@@ -53,8 +58,8 @@ def sql_new_thread(section_id, creator_id, name):
 
 def sql_get_threads(section_id):
     sql = "SELECT T.id, T.name, " \
-          "(SELECT COUNT(M.id) FROM messages M WHERE T.id=M.thread_id) " \
-          "FROM threads T WHERE T.section_id=:section_id"
+          "(SELECT COUNT(M.id) FROM messages M WHERE T.id=M.thread_id), U.username " \
+          "FROM users U, threads T WHERE T.section_id=:section_id AND U.id=T.creator_id"
 
     result = db.session.execute(sql, {"section_id": section_id})
     return result.fetchall()

@@ -3,6 +3,8 @@ from flask import render_template, request, redirect
 from db import db
 import users
 
+# ROUTING START
+
 
 @app.route("/section/<int:section_id>/thread/<int:thread_id>")
 def thread(section_id, thread_id):
@@ -36,6 +38,9 @@ def new_message():
     sql_new_message(thread_id, sender_id, message)
 
     return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id))
+
+
+# ROUTING END
 
 
 def sql_new_message(thread_id, sender_id, message):

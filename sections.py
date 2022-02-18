@@ -3,6 +3,8 @@ from flask import render_template, request, redirect
 from db import db
 import users
 
+# ROUTING START
+
 
 @app.route("/")
 def index():
@@ -43,6 +45,9 @@ def add_user_to_section():
     sql_add_user_to_section(section_id, user_id)
 
     return redirect("/")
+
+
+# ROUTING END
 
 
 def sql_new_section(name, hidden):

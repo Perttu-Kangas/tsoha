@@ -4,6 +4,8 @@ from db import db
 from flask import abort, request, session, render_template, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 
+# ROUTING START
+
 
 @app.route("/logout")
 def logout():
@@ -48,6 +50,8 @@ def register():
         return render_template("error.html", message="Rekisteröinti ei onnistunut")
     return redirect("/")
 
+
+# ROUTING END
 
 def sql_register(username, password, role):
     # In reality role wouldn't be made like this,
