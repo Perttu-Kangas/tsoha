@@ -4,17 +4,14 @@
 
 <div class="site_content">
     <div class="box">
+        {% for message in messages %}
         <div class="box_title">
-            <p>Ketjun viestit</p>
+            <p>{{ message[0] }}, {{ message[1] }}</p>
         </div>
         <div class="box_content">
-            {% for message in messages %}
             <p>{{ message[2] }}</p>
-            <br>
-            <p>Lähettäjä {{ message[0] }}, {{ message[1] }}</p>
-            <br><br>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 
     {% if session.user_id > 0 %}
