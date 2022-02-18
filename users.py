@@ -1,10 +1,55 @@
+from app import app
 import os
 from db import db
-from flask import abort, request, session
+from flask import abort, request, session, render_template, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
-def register(username, password, role):
+@app.route("/logout")
+def logout():
+    session_logout()
+    return redirect("/")
+
+
+@app.route("/login", methods=["post"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+
+    if len(username) < 4 or len(username) > 20:
+        return render_template("error.html", message="Tunnuksessa tulee olla 4-20 merkkiä")
+
+    if len(password) > 40 or len(password) < 8:
+        return render_template("error.html", message="Salasanan tulee olla 8-40 merkkiä")
+
+    if not sql_login(username, password):
+        return render_template("error.html", message="Väärä tunnus tai salasana")
+    return redirect("/")
+
+
+@app.route("/register", methods=["post"])
+def register():
+    username = request.form["username"]
+    if len(username) < 4 or len(username) > 20:
+        return render_template("error.html", message="Tunnuksessa tulee olla 4-20 merkkiä")
+
+    password1 = request.form["password1"]
+    password2 = request.form["password2"]
+    if password1 != password2:
+        return render_template("error.html", message="Salasanat eroavat")
+    if password1 == "":
+        return render_template("error.html", message="Salasana on tyhjä")
+    if len(password1) > 40 or len(password1) < 8:
+        return render_template("error.html", message="Salasanan tulee olla 8-40 merkkiä")
+
+    role = 1 if request.form.get("role") else 0
+
+    if not sql_register(username, password1, role):
+        return render_template("error.html", message="Rekisteröinti ei onnistunut")
+    return redirect("/")
+
+
+def sql_register(username, password, role):
     # In reality role wouldn't be made like this,
     # but since this is purely made for this course
     # and people have to be able to test with admin role
@@ -21,7 +66,7 @@ def register(username, password, role):
     return login(username, password)
 
 
-def login(name, password):
+def sql_login(name, password):
     sql = "SELECT id, password, role FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username": name})
     user = result.fetchone()
@@ -35,14 +80,14 @@ def login(name, password):
     return True
 
 
-def get_id_by_name(username):
+def sql_get_id_by_name(username):
     sql = "SELECT id FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
     return -1 if not user else user[0]
 
 
-def logout():
+def session_logout():
     del session["user_id"]
     del session["user_role"]
 
@@ -64,7 +109,7 @@ def require_role(role):
         abort(403)
 
 
-def has_view_permission(section_id):
+def sql_has_view_permission(section_id):
     if user_role() > 0:
         # Admin
         return True
@@ -80,7 +125,7 @@ def has_section_edit_permission():
     return user_role() > 0
 
 
-def has_thread_edit_permission(thread_id):
+def sql_has_thread_edit_permission(thread_id):
     if user_role() > 0:
         # Admin
         return True
@@ -90,7 +135,7 @@ def has_thread_edit_permission(thread_id):
     return not result.fetchone()
 
 
-def has_message_edit_permission(message_id):
+def sql_has_message_edit_permission(message_id):
     if user_role() > 0:
         # Admin
         return True

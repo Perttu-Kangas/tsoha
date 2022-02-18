@@ -27,6 +27,10 @@ body {
     padding-bottom: 10px
 }
 
+.box a {
+    text-decoration: underline;
+}
+
 .box_title {
     background: rgb(200,100,0);
     border-radius: 10px 10px 0px 0px;
@@ -37,10 +41,6 @@ body {
     background: rgb(150, 150, 150);
     border-radius: 0px 0px 10px 10px;
     padding: 10px;
-}
-
-.box_content a {
-    text-decoration: underline;
 }
 
 a {
