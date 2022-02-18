@@ -8,11 +8,11 @@
             <a href="/section/{{ section[0] }}">{{ section[1] }}</a>
         </div>
         <div class="box_content">
-            Ketjuja yhteensä: {{ section[2] }}
+            <p>Ketjuja yhteensä: {{ section[2] }}</p>
             {% if session.user_role == 1 and section[3] == 1 %}
             <br>
             <form action="/add_user_to_section" method="POST">
-                Käyttäjä: <br>
+                <p>Käyttäjä:</p> <br>
                 <input type="text" name="username" minlength="4" maxlength="20"> <br>
                 <input type="hidden" name="section_id" value="{{ section[0] }}">
                 <input type="submit" value="Lisää käyttäjälle oikeus alueelle">
@@ -25,14 +25,14 @@
     {% if session.user_role == 1 %}
     <div class="box">
         <div class="box_title">
-            Luo uusi alue
+            <p>Luo uusi alue</p>
         </div>
         <div class="box_content">
             <form action="/new_section" method="POST">
-                Aihe: <br>
+                <p>Aihe:</p> <br>
                 <input type="text" name="section_name" minlength="4" maxlength="100"> <br>
-                Piilotettu alue: <input type="checkbox" name="hidden_section" value="1"> <br>
-                Piilotetulle alueelle voi lisätä käyttäjiä sen luomisen jälkeen. <br>
+                <p>Piilotettu alue:</p> <input type="checkbox" name="hidden_section" value="1"> <br>
+                <p>Piilotetulle alueelle voi lisätä käyttäjiä sen luomisen jälkeen.</p> <br>
                 <input type="submit" value="Luo alue">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>

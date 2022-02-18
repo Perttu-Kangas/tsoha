@@ -5,13 +5,13 @@
 <div class="site_content">
     <div class="box">
         <div class="box_title">
-            Ketjun viestit
+            <p>Ketjun viestit</p>
         </div>
         <div class="box_content">
             {% for message in messages %}
-            {{ message[2] }}
+            <p>{{ message[2] }}</p>
             <br>
-            Lähettäjä {{ message[0] }}, {{ message[1] }}
+            <p>Lähettäjä {{ message[0] }}, {{ message[1] }}</p>
             <br><br>
             {% endfor %}
         </div>
@@ -19,11 +19,11 @@
 
     <div class="box">
         <div class="box_title">
-            Lähetä uusi viesti
+            <p>Lähetä uusi viesti</p>
         </div>
         <div class="box_content">
             <form action="/new_message" method="POST">
-                Viesti: <br>
+                <p>Viesti:</p> <br>
                 <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea>
                 <input type="hidden" name="section_id" value="{{ section_id }}">
                 <input type="hidden" name="thread_id" value="{{ thread_id }}">

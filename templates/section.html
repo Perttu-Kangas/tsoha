@@ -9,20 +9,20 @@
             <a href="/section/{{ section_id }}/thread/{{ thread[0] }}">{{ thread[1] }}</a>
         </div>
         <div class="box_content">
-            Viestejä yhteensä: {{ thread[2] }}
+            <p>Viestejä yhteensä: {{ thread[2] }}</p>
         </div>
     </div>
     {% endfor %}
 
     <div class="box">
         <div class="box_title">
-            Luo uusi ketju
+            <p>Luo uusi ketju</p>
         </div>
         <div class="box_content">
             <form action="/new_thread" method="POST">
-                Aihe: <br>
+                <p>Aihe:</p> <br>
                 <input type="text" name="thread_name" minlength="4" maxlength="100"> <br>
-                Aloitusviesti: <br>
+                <p>Aloitusviesti:</p> <br>
                 <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea>
                 <input type="hidden" name="section_id" value="{{ section_id }}">
                 <input type="submit" value="Luo ketju">

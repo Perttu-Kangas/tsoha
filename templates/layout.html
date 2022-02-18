@@ -7,7 +7,15 @@
     <link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 
-<div class="site_content">
+<div class="site_content" style="-ms-flex-direction: row; flex-direction: row;">
+    <div class="box">
+        <div class="box_title"></div>
+        <div class="box_content">
+            <a href="/">Palaa etusivulle</a>
+            <br>
+            <input action="action" type="button" value="Palaa edelliselle sivustolle" onclick="window.history.go(-1); return false;" />
+        </div>
+    </div>
     <div class="box">
         {% if session.user_id %}
         <div class="box_title">

@@ -39,6 +39,10 @@ body {
     padding: 10px;
 }
 
+.box_content a {
+    text-decoration: underline;
+}
+
 a {
     text-decoration: none;
     font-size: 22px;
@@ -61,6 +65,13 @@ input[type=password] {
 }
 
 input[type=submit] {
+    background-color: orange;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+}
+
+input[type=button] {
     background-color: orange;
     text-decoration: none;
     cursor: pointer;
