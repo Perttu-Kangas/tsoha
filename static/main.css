@@ -70,3 +70,11 @@ input[type=submit] {
 summary {
     cursor: pointer;
 }
+
+@media screen and (max-width: 1180px) {
+
+    .site_content {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+}
