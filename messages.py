@@ -45,7 +45,7 @@ def new_message():
 
 def sql_new_message(thread_id, sender_id, message):
     sql = "INSERT INTO messages (thread_id, sender_id, sent_at, message) " \
-          "VALUES (:thread_id, :sender_id, NOW(), :message)"
+          "VALUES (:thread_id, :sender_id, DATETIME(), :message)"
     db.session.execute(sql, {"thread_id": thread_id, "sender_id": sender_id, "message": message})
     db.session.commit()
 
