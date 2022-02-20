@@ -32,6 +32,6 @@ CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     thread_id INTEGER REFERENCES threads,
     sender_id INTEGER REFERENCES users,
-    sent_at TIMESTAMP,
+    sent_at TIMESTAMP(0),
     message TEXT
 );
