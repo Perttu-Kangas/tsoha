@@ -20,7 +20,7 @@
                             <p>Muokkaa</p>
                         </summary>
                         <form action="/edit_thread" method="POST">
-                            <p>Aihe:</p> <br>
+                            <p>Aihe:</p>
                             <input type="text" name="thread_name" minlength="4" maxlength="100" value="{{ thread[1] }}">
                             <input type="submit" value="Tallenna">
                             <input type="hidden" name="section_id" value="{{ section_id }}">
@@ -45,9 +45,9 @@
         </div>
         <div class="box_content">
             <form action="/new_thread" method="POST">
-                <p>Aihe:</p> <br>
+                <p>Aihe:</p>
                 <input type="text" name="thread_name" minlength="4" maxlength="100"> <br>
-                <p>Aloitusviesti:</p> <br>
+                <p>Aloitusviesti:</p>
                 <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea>
                 <input type="submit" value="Luo ketju">
                 <input type="hidden" name="section_id" value="{{ section_id }}">
