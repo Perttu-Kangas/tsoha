@@ -9,7 +9,7 @@
         </div>
         <div class="box_content">
             <p>Ketjuja yhteensä: {{ section[2] }}</p>
-            {% if session.user_role == 1 and section[3] == 1 %}
+            {% if session.user_role == 1 %}
             <br>
             <form action="/add_user_to_section" method="POST">
                 <p>Käyttäjä:</p> <br>
