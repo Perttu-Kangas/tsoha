@@ -43,6 +43,20 @@ body {
     padding: 10px;
 }
 
+.box_content ul {
+    padding: 0px;
+}
+
+.box_content summary p {
+    font-size: 22px;
+}
+
+.box_content li {
+    display: inline-block;
+    width: auto;
+    list-style: outside none none;
+}
+
 a {
     text-decoration: none;
     font-size: 22px;
@@ -78,8 +92,13 @@ input[type=button] {
     border: none;
 }
 
-summary {
+details summary {
     cursor: pointer;
+    text-decoration: underline;
+}
+
+details summary > * {
+    display: inline;
 }
 
 @media screen and (max-width: 1180px) {

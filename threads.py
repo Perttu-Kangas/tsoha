@@ -45,7 +45,57 @@ def new_thread():
     return redirect("/section/" + str(section_id))
 
 
+@app.route("/delete_thread/<int:thread_id>", methods=["post"])
+def delete_thread(thread_id):
+    if not users.is_logged_in():
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään poistaakseen ketjun")
+
+    users.check_csrf()
+
+    if not users.sql_has_thread_edit_permission(thread_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
+
+    section_id = sql_delete_thread(thread_id)[0]
+
+    return redirect("/section/" + str(section_id))
+
+
+@app.route("/edit_thread", methods=["post"])
+def edit_thread():
+    if not users.is_logged_in():
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään muokatakseen ketjua")
+
+    users.check_csrf()
+
+    thread_name = request.form["thread_name"]
+
+    if len(thread_name) < 4 or len(thread_name) > 100:
+        return render_template("error.html", message="Alueen nimen tulee olla 4-100 merkkiä")
+
+    thread_id = request.form["thread_id"]
+
+    if not users.sql_has_thread_edit_permission(thread_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
+
+    sql_edit_thread(thread_id, thread_name)
+    section_id = request.form["section_id"]
+
+    return redirect("/section/" + str(section_id))
+
+
 # ROUTING END
+
+def sql_edit_thread(thread_id, name):
+    sql = "UPDATE threads SET name=:name WHERE id=:thread_id"
+    db.session.execute(sql, {"name": name, "thread_id": thread_id})
+    db.session.commit()
+
+
+def sql_delete_thread(thread_id):
+    sql = "DELETE FROM threads WHERE id=:thread_id RETURNING section_id"
+    result = db.session.execute(sql, {"thread_id": thread_id})
+    db.session.commit()
+    return result.fetchone()
 
 
 def sql_new_thread(section_id, creator_id, name):
@@ -57,9 +107,12 @@ def sql_new_thread(section_id, creator_id, name):
 
 
 def sql_get_threads(section_id):
+    user_id = users.user_id()
+    user_role = users.user_role()
     sql = "SELECT T.id, T.name, " \
-          "(SELECT COUNT(M.id) FROM messages M WHERE T.id=M.thread_id), U.username " \
+          "(SELECT COUNT(M.id) FROM messages M WHERE T.id=M.thread_id), U.username, " \
+          "(T.creator_id=:user_id OR :user_role>0) " \
           "FROM users U, threads T WHERE T.section_id=:section_id AND U.id=T.creator_id"
 
-    result = db.session.execute(sql, {"section_id": section_id})
+    result = db.session.execute(sql, {"section_id": section_id, "user_id": user_id, "user_role": user_role})
     return result.fetchall()

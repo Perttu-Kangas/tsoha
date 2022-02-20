@@ -10,6 +10,30 @@
         </div>
         <div class="box_content">
             <p>{{ message[2] }}</p>
+            {% if {{ message[4] }} == 1 %}
+            <br>
+            <ul>
+                <li>
+                    <details>
+                        <summary>
+                            <p>Muokkaa</p>
+                        </summary>
+                        <form action="/edit_message" method="POST">
+                            <p>Viesti:</p> <br>
+                            <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000" value="{{ message[2] }}"></textarea>
+                            <input type="submit" value="Tallenna">
+                            <input type="hidden" name="section_id" value="{{ section_id }}">
+                            <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                            <input type="hidden" name="message_id" value="{{ message[3] }}">
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                        </form>
+                    </details>
+                </li>
+                <li>
+                    <a href="/delete_message/{{ message[3] }}">Poista</a>
+                </li>
+            </ul>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

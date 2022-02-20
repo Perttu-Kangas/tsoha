@@ -14,9 +14,30 @@
             <form action="/add_user_to_section" method="POST">
                 <p>Käyttäjä:</p> <br>
                 <input type="text" name="username" minlength="4" maxlength="20"> <br>
-                <input type="hidden" name="section_id" value="{{ section[0] }}">
                 <input type="submit" value="Lisää käyttäjälle oikeus alueelle">
+                <input type="hidden" name="section_id" value="{{ section[0] }}">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
+            <br>
+            <ul>
+                <li>
+                    <details>
+                        <summary>
+                            <p>Muokkaa</p>
+                        </summary>
+                        <form action="/edit_section" method="POST">
+                            <p>Aihe:</p> <br>
+                            <input type="text" name="section_name" minlength="4" maxlength="100" value="{{ section[1] }}">
+                            <input type="submit" value="Tallenna">
+                            <input type="hidden" name="section_id" value="{{ section[0] }}">
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                        </form>
+                    </details>
+                </li>
+                <li>
+                    <a href="/delete_section/{{ section[0] }}">Poista</a>
+                </li>
+            </ul>
             {% endif %}
         </div>
     </div>

@@ -67,7 +67,7 @@ def sql_register(username, password, role):
     except:
         # Most likely same username already exists...
         return False
-    return login(username, password)
+    return sql_login(username, password)
 
 
 def sql_login(name, password):
@@ -122,7 +122,7 @@ def sql_has_view_permission(section_id):
           "WHERE S.id=:section_id AND (S.hidden=0 OR :user_id IN " \
           "(SELECT SA.user_id FROM sections_access SA WHERE SA.section_id=S.id))"
     result = db.session.execute(sql, {"section_id": section_id, "user_id": user_id()})
-    return not result.fetchone()
+    return result.fetchone() is not None
 
 
 def has_section_edit_permission():
@@ -136,7 +136,7 @@ def sql_has_thread_edit_permission(thread_id):
 
     sql = "SELECT id FROM threads WHERE id=:thread_id AND creator_id=:user_id"
     result = db.session.execute(sql, {"thread_id": thread_id, "user_id": user_id()})
-    return not result.fetchone()
+    return result.fetchone() is not None
 
 
 def sql_has_message_edit_permission(message_id):
@@ -146,7 +146,7 @@ def sql_has_message_edit_permission(message_id):
 
     sql = "SELECT id FROM messages WHERE id=:message_id AND sender_id=:user_id"
     result = db.session.execute(sql, {"message_id": message_id, "user_id": user_id()})
-    return not result.fetchone()
+    return result.fetchone() is not None
 
 
 def check_csrf():

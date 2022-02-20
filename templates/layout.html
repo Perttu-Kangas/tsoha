@@ -9,10 +9,10 @@
 
 <div class="site_content" style="-ms-flex-direction: row; flex-direction: row; justify-content: space-evenly;">
     <div class="box" style="max-width: 570px">
-        <div class="box_title"></div>
-        <div class="box_content">
+        <div class="box_title">
             <a href="/">Palaa etusivulle</a>
-            <br><br>
+        </div>
+        <div class="box_content">
             <input action="action" type="button" value="Palaa edelliselle sivustolle" onclick="window.history.go(-1); return false;" />
         </div>
     </div>
@@ -34,9 +34,9 @@
         </div>
         <div class="box_content">
             <form action="/login" method="POST">
-                <p>Käyttäjänimi:</p><br>
+                <p>Käyttäjänimi:</p>
                 <input type="text" name="username" minlength="4" maxlength="20"> <br>
-                <p>Salasana:</p> <br>
+                <p>Salasana:</p>
                 <input type="password" name="password" minlength="8" maxlength="40"> <br>
                 <input type="submit" value="Kirjaudu">
             </form>
@@ -45,13 +45,13 @@
                     <p>Jos sinulla ei ole tunnusta, voit luoda sen klikkaamalla minua.</p>
                 </summary>
                 <form action="/register" method="POST">
-                    <p>Käyttäjänimi:</p> <br>
-                    <input type="text" name="username" minlength="4" maxlength="20"> <br>
-                    <p>Salasana:</p> <br>
-                    <input type="password" name="password1" minlength="8" maxlength="40"> <br>
-                    <p>Salasana uudestaan:</p> <br>
-                    <input type="password" name="password2" minlength="8" maxlength="40"> <br>
-                    <p>Tee minusta ylläpitäjä:</p> <input type="checkbox" name="role" value="1"> <br>
+                    <p>Käyttäjänimi:</p>
+                    <input type="text" name="username" minlength="4" maxlength="20">
+                    <p>Salasana:</p>
+                    <input type="password" name="password1" minlength="8" maxlength="40">
+                    <p>Salasana uudestaan:</p>
+                    <input type="password" name="password2" minlength="8" maxlength="40">
+                    <p>Tee minusta ylläpitäjä:</p> <input type="checkbox" name="role" value="1"><br>
                     <input type="submit" value="Luo tunnus">
                 </form>
             </details>

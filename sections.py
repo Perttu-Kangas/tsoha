@@ -31,6 +31,7 @@ def new_section():
 @app.route("/add_user_to_section", methods=["post"])
 def add_user_to_section():
     users.require_role(1)
+    users.check_csrf()
 
     section_id = request.form["section_id"]
     username = request.form["username"]
@@ -47,7 +48,43 @@ def add_user_to_section():
     return redirect("/")
 
 
+@app.route("/delete_section/<int:section_id>", methods=["post"])
+def delete_section(section_id):
+    users.require_role(1)
+
+    sql_delete_section(section_id)
+
+    return redirect("/")
+
+
+@app.route("/edit_section", methods=["post"])
+def edit_section():
+    users.require_role(1)
+    users.check_csrf()
+
+    section_id = request.form["section_id"]
+    section_name = request.form["section_name"]
+
+    if len(section_name) < 4 or len(section_name) > 100:
+        return render_template("error.html", message="Alueen nimen tulee olla 4-100 merkkiä")
+
+    sql_edit_section(section_id, section_name)
+
+    return redirect("/")
+
+
 # ROUTING END
+
+def sql_edit_section(section_id, name):
+    sql = "UPDATE sections SET name=:name WHERE id=:section_id"
+    db.session.execute(sql, {"name": name, "section_id": section_id})
+    db.session.commit()
+
+
+def sql_delete_section(section_id):
+    sql = "DELETE FROM sections WHERE id=:section_id"
+    db.session.execute(sql, {"section_id": section_id})
+    db.session.commit()
 
 
 def sql_new_section(name, hidden):

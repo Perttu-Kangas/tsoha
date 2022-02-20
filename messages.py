@@ -40,7 +40,65 @@ def new_message():
     return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id))
 
 
+@app.route("/delete_message/<int:message_id>", methods=["post"])
+def delete_message(message_id):
+    if not users.is_logged_in():
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään poistaakseen viestin")
+
+    users.check_csrf()
+
+    if not users.sql_has_message_edit_permission(message_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
+
+    thread_id = sql_delete_message(message_id)[0]
+    section_id = sql_get_section_id(thread_id)[0]
+
+    return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id))
+
+
+@app.route("/edit_message", methods=["post"])
+def edit_message():
+    if not users.is_logged_in():
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään muokatakseen ketjua")
+
+    users.check_csrf()
+
+    message = request.form["message"]
+
+    if len(message) < 1 or len(message) > 2000:
+        return render_template("error.html", message="Viestin tulee olla 1-2000 merkkiä")
+
+    message_id = request.form["message_id"]
+
+    if not users.sql_has_message_edit_permission(message_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
+
+    sql_edit_message(message_id, message)
+    section_id = request.form["section_id"]
+    thread_id = request.form["thread_id"]
+
+    return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id))
+
 # ROUTING END
+
+
+def sql_edit_message(message_id, message):
+    sql = "UPDATE messages SET message=:message WHERE id=:message_id"
+    db.session.execute(sql, {"message": message, "message_id": message_id})
+    db.session.commit()
+
+
+def sql_get_section_id(thread_id):
+    sql = "SELECT section_id FROM threads WHERE id=:thread_id"
+    result = db.session.execute(sql, {"thread_id": thread_id})
+    return result.fetchone()
+
+
+def sql_delete_message(message_id):
+    sql = "DELETE FROM messages WHERE id=:message_id RETURNING thread_id"
+    result = db.session.execute(sql, {"message_id": message_id})
+    db.session.commit()
+    return result.fetchone()
 
 
 def sql_new_message(thread_id, sender_id, message):
@@ -51,9 +109,11 @@ def sql_new_message(thread_id, sender_id, message):
 
 
 def sql_get_messages(thread_id):
-    sql = "SELECT U.username, M.sent_at, M.message " \
+    user_id = users.user_id()
+    user_role = users.user_role()
+    sql = "SELECT U.username, M.sent_at, M.message, M.id, (M.sender_id=:user_id OR :user_role>0) " \
           "FROM users U, messages M WHERE M.thread_id=:thread_id AND U.id=M.sender_id " \
           "ORDER BY M.id"
 
-    result = db.session.execute(sql, {"thread_id": thread_id})
+    result = db.session.execute(sql, {"thread_id": thread_id, "user_id": user_id, "user_role": user_role})
     return result.fetchall()
