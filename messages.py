@@ -157,8 +157,8 @@ def sql_get_messages(thread_id):
           "FROM users U, messages M WHERE M.thread_id=:thread_id AND U.id=M.sender_id " \
           "ORDER BY M.id"
 
-    result = db.session.execute(sql,
-                                {"thread_id": thread_id, "user_id": users.user_id(), "user_role": users.user_role()})
+    result = db.session.execute(sql, {"thread_id": thread_id, "user_id": users.user_id(),
+                                      "user_role": users.user_role()})
     return result.fetchall()
 
 
