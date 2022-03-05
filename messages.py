@@ -12,8 +12,9 @@ def thread(section_id, thread_id):
     if not users.sql_has_view_permission(section_id):
         return render_template("error.html", message="Sivustoa ei löytynyt")
 
-    return render_template("thread.html", messages=sql_get_messages(thread_id),
-                           section_id=section_id, thread_id=thread_id)
+    messages = sql_get_messages(thread_id)
+    return render_template("thread.html", messages=messages,
+                           section_id=section_id, thread_id=thread_id, thread_name=messages[0][5])
 
 
 @app.route("/new_message", methods=["post"])
@@ -40,7 +41,7 @@ def new_message():
     return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id))
 
 
-@app.route("/delete_message")
+@app.route("/delete_message", methods=["post"])
 def delete_message():
     if not users.is_logged_in():
         return render_template("error.html", message="Täytyy olla kirjautunut sisään poistaakseen viestin")
@@ -106,6 +107,12 @@ def sql_edit_message(message_id, message):
 
 def sql_get_section_id(thread_id):
     sql = "SELECT section_id FROM threads WHERE id=:thread_id"
+    result = db.session.execute(sql, {"thread_id": thread_id})
+    return result.fetchone()
+
+
+def sql_get_thread_name(thread_id):
+    sql = "SELECT name FROM threads WHERE id=:thread_id"
     result = db.session.execute(sql, {"thread_id": thread_id})
     return result.fetchone()
 

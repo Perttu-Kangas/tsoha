@@ -48,7 +48,7 @@ def add_user_to_section():
     return redirect("/")
 
 
-@app.route("/delete_section")
+@app.route("/delete_section", methods=["post"])
 def delete_section():
     users.require_admin()
     users.check_csrf()
