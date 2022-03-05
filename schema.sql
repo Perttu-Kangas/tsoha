@@ -6,8 +6,6 @@ CREATE TABLE users (
     role INTEGER
 );
 
-CREATE INDEX idx_username ON users (username);
-
 CREATE TABLE sections (
     id SERIAL PRIMARY KEY,
     name TEXT,
