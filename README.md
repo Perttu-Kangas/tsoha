@@ -10,11 +10,8 @@ Sovelluksen ominaisuuksia:
 * Käyttäjä voi kirjoittaa uuden viestin olemassa olevaan ketjuun.
 * Käyttäjä voi muokata luomansa ketjun otsikkoa sekä lähettämänsä viestin sisältöä. Käyttäjä voi myös poistaa ketjun tai viestin.
 * Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
+* Käyttäjä voi tykätä viestistä.
 * Ylläpitäjä voi lisätä ja poistaa keskustelualueita.
 * Ylläpitäjä voi luoda salaisen alueen ja määrittää, keillä käyttäjillä on pääsy alueelle.
-* todo lisää ominaisuuksia, jos aikaa jää
-
-Tekemättä:
-* Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
 
 Sovellus on testattavissa [Herokussa](https://hytsoha-keskustelusovellus.herokuapp.com/)
