@@ -45,12 +45,10 @@ def new_thread():
     return redirect("/section/" + str(section_id))
 
 
-@app.route("/delete_thread/<int:thread_id>", methods=["post"])
+@app.route("/delete_thread/<int:thread_id>")
 def delete_thread(thread_id):
     if not users.is_logged_in():
         return render_template("error.html", message="Täytyy olla kirjautunut sisään poistaakseen ketjun")
-
-    users.check_csrf()
 
     if not users.sql_has_thread_edit_permission(thread_id):
         return render_template("error.html", message="Sivustoa ei löytynyt")

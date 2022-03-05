@@ -15,21 +15,21 @@ CREATE TABLE sections (
 
 CREATE TABLE sections_access (
     id SERIAL PRIMARY KEY,
-    section_id INTEGER REFERENCES sections,
-    user_id INTEGER REFERENCES users
+    section_id INTEGER REFERENCES sections ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE CASCADE
 );
 
 CREATE TABLE threads (
     id SERIAL PRIMARY KEY,
-    section_id INTEGER REFERENCES sections,
-    creator_id INTEGER REFERENCES users,
+    section_id INTEGER REFERENCES sections ON DELETE CASCADE,
+    creator_id INTEGER REFERENCES users ON DELETE CASCADE,
     name TEXT
 );
 
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    thread_id INTEGER REFERENCES threads,
-    sender_id INTEGER REFERENCES users,
+    thread_id INTEGER REFERENCES threads ON DELETE CASCADE,
+    sender_id INTEGER REFERENCES users ON DELETE CASCADE,
     sent_at TIMESTAMP(0),
     message TEXT
 );

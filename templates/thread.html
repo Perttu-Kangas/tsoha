@@ -3,14 +3,14 @@
 
 
 <div class="site_content">
+    {% for message in messages %}
     <div class="box">
-        {% for message in messages %}
         <div class="box_title">
             <p>{{ message[0] }}, {{ message[1] }}</p>
         </div>
         <div class="box_content">
             <p>{{ message[2] }}</p>
-            {% if {{ message[4] }} == 1 %}
+            {% if message[4] %}
             <br>
             <ul>
                 <li>
@@ -19,8 +19,8 @@
                             <p>Muokkaa</p>
                         </summary>
                         <form action="/edit_message" method="POST">
-                            <p>Viesti:</p> <br>
-                            <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000" value="{{ message[2] }}"></textarea>
+                            <p>Viesti:</p>
+                            <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000">{{ message[2] }}</textarea>
                             <input type="submit" value="Tallenna">
                             <input type="hidden" name="section_id" value="{{ section_id }}">
                             <input type="hidden" name="thread_id" value="{{ thread_id }}">
@@ -35,17 +35,17 @@
             </ul>
             {% endif %}
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 
-    {% if session.user_id > 0 %}
+    {% if session.user_id %}
     <div class="box">
         <div class="box_title">
             <p>Lähetä uusi viesti</p>
         </div>
         <div class="box_content">
             <form action="/new_message" method="POST">
-                <p>Viesti:</p> <br>
+                <p>Viesti:</p>
                 <textarea name="message" rows="4" cols="50" minlength="1" maxlength="2000"></textarea>
                 <input type="hidden" name="section_id" value="{{ section_id }}">
                 <input type="hidden" name="thread_id" value="{{ thread_id }}">

@@ -48,7 +48,7 @@ def add_user_to_section():
     return redirect("/")
 
 
-@app.route("/delete_section/<int:section_id>", methods=["post"])
+@app.route("/delete_section/<int:section_id>")
 def delete_section(section_id):
     users.require_admin()
 
