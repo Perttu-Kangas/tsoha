@@ -30,7 +30,11 @@
                     </details>
                 </li>
                 <li>
-                    <a href="/delete_thread/{{ thread[0] }}">Poista</a>
+                    <form action="/delete_thread" method="POST">
+                        <input type="submit" value="Poista">
+                        <input type="hidden" name="thread_id" value="{{ thread[0] }}">
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    </form>
                 </li>
             </ul>
             {% endif %}

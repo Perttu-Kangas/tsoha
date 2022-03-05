@@ -40,10 +40,14 @@ def new_message():
     return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id))
 
 
-@app.route("/delete_message/<int:message_id>")
-def delete_message(message_id):
+@app.route("/delete_message")
+def delete_message():
     if not users.is_logged_in():
         return render_template("error.html", message="Täytyy olla kirjautunut sisään poistaakseen viestin")
+
+    users.check_csrf()
+
+    message_id = request.form["message_id"]
 
     if not users.sql_has_message_edit_permission(message_id):
         return render_template("error.html", message="Sivustoa ei löytynyt")

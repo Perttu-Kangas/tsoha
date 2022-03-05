@@ -48,10 +48,12 @@ def add_user_to_section():
     return redirect("/")
 
 
-@app.route("/delete_section/<int:section_id>")
-def delete_section(section_id):
+@app.route("/delete_section")
+def delete_section():
     users.require_admin()
+    users.check_csrf()
 
+    section_id = request.form["section_id"]
     sql_delete_section(section_id)
 
     return redirect("/")
