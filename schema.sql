@@ -33,3 +33,9 @@ CREATE TABLE messages (
     sent_at TIMESTAMP(0),
     message TEXT
 );
+
+CREATE TABLE likes (
+    id SERIAL PRIMARY KEY,
+    message_id INTEGER REFERENCES messages ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE CASCADE
+);

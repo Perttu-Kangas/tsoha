@@ -2,19 +2,19 @@
 {% block content %}
 
 <div class="site_content">
-
     <div class="box">
         <div class="box_title">
             <a href="/section/{{ section_id }}">{{ path[0] }}/{{ path[1] }}</a>
         </div>
-        <div class="box_content">
+        <div class="box_content" id="{{ message[3] }}">
             {% for message in messages %}
             <div class="box">
                 <div class="box_title">
                     <p>{{ message[0] }}, {{ message[1] }}</p>
                 </div>
                 <div class="box_content">
-                    <p>{{ message[2] }}</p>
+                    <p>{{ message[2] }}</p> <br>
+                    <p>Tykkäyksiä: {{ message[5] }}</p>
                     {% if message[4] %}
                     <br>
                     <ul>
@@ -33,6 +33,15 @@
                                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                                 </form>
                             </details>
+                        </li>
+                        <li>
+                            <form action="/like_message" method="POST">
+                                <input type="submit" value="Tykkää">
+                                <input type="hidden" name="section_id" value="{{ section_id }}">
+                                <input type="hidden" name="thread_id" value="{{ thread_id }}">
+                                <input type="hidden" name="message_id" value="{{ message[3] }}">
+                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            </form>
                         </li>
                         <li>
                             <form action="/delete_message" method="POST">

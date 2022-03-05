@@ -96,6 +96,26 @@ def find_message():
     return render_template("find.html", messages=messages)
 
 
+@app.route("/like_message", methods=["post"])
+def like_message():
+    if not users.is_logged_in():
+        return render_template("error.html", message="Täytyy olla kirjautunut sisään poistaakseen viestin")
+
+    users.check_csrf()
+
+    section_id = request.form["section_id"]
+    thread_id = request.form["thread_id"]
+    message_id = request.form["message_id"]
+
+    if not users.sql_has_view_permission(section_id):
+        return render_template("error.html", message="Sivustoa ei löytynyt")
+
+    if not sql_has_liked_message(message_id):
+        sql_like_message(message_id)
+
+    return redirect("/section/" + str(section_id) + "/thread/" + str(thread_id) + "#" + str(message_id))
+
+
 # ROUTING END
 
 
@@ -132,20 +152,17 @@ def sql_new_message(thread_id, sender_id, message):
 
 
 def sql_get_messages(thread_id):
-    user_id = users.user_id()
-    user_role = users.user_role()
-    sql = "SELECT U.username, M.sent_at, M.message, M.id, (M.sender_id=:user_id OR :user_role>0) " \
+    sql = "SELECT U.username, M.sent_at, M.message, M.id, (M.sender_id=:user_id OR :user_role>0), " \
+          "(SELECT COUNT(L.id) FROM likes L WHERE L.message_id=M.id) " \
           "FROM users U, messages M WHERE M.thread_id=:thread_id AND U.id=M.sender_id " \
           "ORDER BY M.id"
 
-    result = db.session.execute(sql, {"thread_id": thread_id, "user_id": user_id, "user_role": user_role})
+    result = db.session.execute(sql,
+                                {"thread_id": thread_id, "user_id": users.user_id(), "user_role": users.user_role()})
     return result.fetchall()
 
 
 def sql_find_messages(message):
-    user_id = users.user_id()
-    user_role = users.user_role()
-
     sql = "SELECT S.id, S.name, T.id, T.name, M.id, M.message, M.sent_at " \
           "FROM sections S, sections_access SA, threads T, messages M " \
           "WHERE M.message LIKE :message AND M.thread_id=T.id AND T.section_id=S.id " \
@@ -153,5 +170,19 @@ def sql_find_messages(message):
           " IN (SELECT SA.user_id FROM sections_access SA WHERE SA.section_id=S.id))" \
           "ORDER BY M.sent_at DESC"
 
-    result = db.session.execute(sql, {"message": "%" + message + "%", "user_id": user_id, "user_role": user_role})
+    result = db.session.execute(sql, {"message": "%" + message + "%", "user_id": users.user_id(),
+                                      "user_role": users.user_role()})
     return result.fetchall()
+
+
+def sql_has_liked_message(message_id):
+    sql = "SELECT id FROM likes WHERE message_id=:message_id AND user_id=:user_id"
+    result = db.session.execute(sql, {"message_id": message_id, "user_id": users.user_id()})
+    return result.fetchone() is not None
+
+
+def sql_like_message(message_id):
+    sql = "INSERT INTO likes (message_id, user_id) " \
+          "VALUES (:message_id, :user_id)"
+    db.session.execute(sql, {"message_id": message_id, "user_id": users.user_id()})
+    db.session.commit()
