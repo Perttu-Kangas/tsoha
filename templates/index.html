@@ -6,6 +6,9 @@
     <div class="box">
         <div class="box_title">
             <a href="/section/{{ section[0] }}">{{ section[1] }}</a>
+            {% if section[3] == 1 %}
+            <p>Tämä on piilotettu alue.</p>
+            {% endif %}
         </div>
         <div class="box_content">
             <p>Ketjuja yhteensä: {{ section[2] }}</p>
