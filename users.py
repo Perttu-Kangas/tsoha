@@ -108,13 +108,13 @@ def user_role():
     return session.get("user_role", 0)
 
 
-def require_role(role):
-    if role < user_role():
+def require_admin():
+    if user_role() == 0:
         abort(403)
 
 
 def sql_has_view_permission(section_id):
-    if user_role() > 0:
+    if user_role() == 1:
         # Admin
         return True
 
@@ -126,11 +126,11 @@ def sql_has_view_permission(section_id):
 
 
 def has_section_edit_permission():
-    return user_role() > 0
+    return user_role() == 1
 
 
 def sql_has_thread_edit_permission(thread_id):
-    if user_role() > 0:
+    if user_role() == 1:
         # Admin
         return True
 
@@ -140,7 +140,7 @@ def sql_has_thread_edit_permission(thread_id):
 
 
 def sql_has_message_edit_permission(message_id):
-    if user_role() > 0:
+    if user_role() == 1:
         # Admin
         return True
 

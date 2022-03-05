@@ -13,7 +13,7 @@ def index():
 
 @app.route("/new_section", methods=["post"])
 def new_section():
-    users.require_role(1)
+    users.require_admin()
     users.check_csrf()
 
     section_name = request.form["section_name"]
@@ -30,7 +30,7 @@ def new_section():
 
 @app.route("/add_user_to_section", methods=["post"])
 def add_user_to_section():
-    users.require_role(1)
+    users.require_admin()
     users.check_csrf()
 
     section_id = request.form["section_id"]
@@ -50,7 +50,7 @@ def add_user_to_section():
 
 @app.route("/delete_section/<int:section_id>", methods=["post"])
 def delete_section(section_id):
-    users.require_role(1)
+    users.require_admin()
 
     sql_delete_section(section_id)
 
@@ -59,7 +59,7 @@ def delete_section(section_id):
 
 @app.route("/edit_section", methods=["post"])
 def edit_section():
-    users.require_role(1)
+    users.require_admin()
     users.check_csrf()
 
     section_id = request.form["section_id"]
