@@ -12,8 +12,8 @@ def section(section_id):
     if not users.sql_has_view_permission(section_id):
         return render_template("error.html", message="Sivustoa ei löytynyt")
 
-    threads = sql_get_threads(section_id)
-    return render_template("section.html", threads=threads, section_id=section_id, section_name=threads[0][5])
+    return render_template("section.html", threads=sql_get_threads(section_id), section_id=section_id,
+                           section_name=sql_get_section_name(section_id))
 
 
 @app.route("/new_thread", methods=["post"])
@@ -94,6 +94,12 @@ def sql_edit_thread(thread_id, name):
     db.session.commit()
 
 
+def sql_get_section_name(section_id):
+    sql = "SELECT name FROM sections WHERE id=:section_id"
+    result = db.session.execute(sql, {"section_id": section_id})
+    return result.fetchone()[0]
+
+
 def sql_delete_thread(thread_id):
     sql = "DELETE FROM threads WHERE id=:thread_id RETURNING section_id"
     result = db.session.execute(sql, {"thread_id": thread_id})
@@ -114,9 +120,9 @@ def sql_get_threads(section_id):
     user_role = users.user_role()
     sql = "SELECT T.id, T.name, " \
           "(SELECT COUNT(M.id) FROM messages M WHERE T.id=M.thread_id), U.username, " \
-          "(T.creator_id=:user_id OR :user_role>0), S.name " \
-          "FROM users U, threads T, sections S " \
-          "WHERE T.section_id=:section_id AND U.id=T.creator_id AND S.id=:section_id"
+          "(T.creator_id=:user_id OR :user_role>0) " \
+          "FROM users U, threads T " \
+          "WHERE T.section_id=:section_id AND U.id=T.creator_id"
 
     result = db.session.execute(sql, {"section_id": section_id, "user_id": user_id, "user_role": user_role})
     return result.fetchall()

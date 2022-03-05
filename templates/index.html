@@ -13,6 +13,7 @@
         <div class="box_content">
             <p>Ketjuja yhteensä: {{ section[2] }}</p>
             {% if session.user_role == 1 %}
+            {% if section[3] == 1 %}
             <br>
             <form action="/add_user_to_section" method="POST">
                 <p>Käyttäjä:</p>
@@ -21,6 +22,7 @@
                 <input type="hidden" name="section_id" value="{{ section[0] }}">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
+            {% endif %}
             <br>
             <ul>
                 <li>

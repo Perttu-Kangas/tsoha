@@ -12,9 +12,9 @@ def thread(section_id, thread_id):
     if not users.sql_has_view_permission(section_id):
         return render_template("error.html", message="Sivustoa ei löytynyt")
 
-    messages = sql_get_messages(thread_id)
-    return render_template("thread.html", messages=messages,
-                           section_id=section_id, thread_id=thread_id, thread_name=messages[0][5])
+    return render_template("thread.html", messages=sql_get_messages(thread_id),
+                           section_id=section_id, thread_id=thread_id,
+                           path=sql_get_path(section_id, thread_id))
 
 
 @app.route("/new_message", methods=["post"])
@@ -85,12 +85,12 @@ def edit_message():
 
 @app.route("/find_message")
 def find_message():
-    message = request.form["message"]
+    message = request.args["message"]
     if len(message) < 3 or len(message) > 20:
         return render_template("error.html", message="Viestin etsinnän tulee olla 3-20 merkkiä")
 
     messages = sql_find_messages(message)
-    if messages is None:
+    if messages is None or len(messages) == 0:
         return render_template("error.html", message="Hakusanalla " + message + " ei löytynt viestejä.")
 
     return render_template("find.html", messages=messages)
@@ -111,9 +111,9 @@ def sql_get_section_id(thread_id):
     return result.fetchone()
 
 
-def sql_get_thread_name(thread_id):
-    sql = "SELECT name FROM threads WHERE id=:thread_id"
-    result = db.session.execute(sql, {"thread_id": thread_id})
+def sql_get_path(section_id, thread_id):
+    sql = "SELECT S.name, T.name FROM sections S, threads T WHERE S.id=:section_id AND T.id=:thread_id"
+    result = db.session.execute(sql, {"section_id": section_id, "thread_id": thread_id})
     return result.fetchone()
 
 
@@ -134,8 +134,8 @@ def sql_new_message(thread_id, sender_id, message):
 def sql_get_messages(thread_id):
     user_id = users.user_id()
     user_role = users.user_role()
-    sql = "SELECT U.username, M.sent_at, M.message, M.id, (M.sender_id=:user_id OR :user_role>0), T.name " \
-          "FROM users U, messages M, threads T WHERE M.thread_id=:thread_id AND U.id=M.sender_id AND T.id=:thread_id " \
+    sql = "SELECT U.username, M.sent_at, M.message, M.id, (M.sender_id=:user_id OR :user_role>0) " \
+          "FROM users U, messages M WHERE M.thread_id=:thread_id AND U.id=M.sender_id " \
           "ORDER BY M.id"
 
     result = db.session.execute(sql, {"thread_id": thread_id, "user_id": user_id, "user_role": user_role})
@@ -151,7 +151,7 @@ def sql_find_messages(message):
           "WHERE M.message LIKE :message AND M.thread_id=T.id AND T.section_id=S.id " \
           "AND (S.hidden=0 OR :user_role=1 OR :user_id" \
           " IN (SELECT SA.user_id FROM sections_access SA WHERE SA.section_id=S.id))" \
-          "ORDER BY M.sent_at"
+          "ORDER BY M.sent_at DESC"
 
     result = db.session.execute(sql, {"message": "%" + message + "%", "user_id": user_id, "user_role": user_role})
     return result.fetchall()
