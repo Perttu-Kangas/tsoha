@@ -21,7 +21,7 @@ def login():
     if len(username) < 4 or len(username) > 20:
         return render_template("error.html", message="Tunnuksessa tulee olla 4-20 merkkiä")
 
-    if len(password) > 40 or len(password) < 8:
+    if len(password) < 8 or len(password) > 40:
         return render_template("error.html", message="Salasanan tulee olla 8-40 merkkiä")
 
     if not sql_login(username, password):
@@ -41,7 +41,7 @@ def register():
         return render_template("error.html", message="Salasanat eroavat")
     if password1 == "":
         return render_template("error.html", message="Salasana on tyhjä")
-    if len(password1) > 40 or len(password1) < 8:
+    if len(password1) < 8 or len(password1) > 40:
         return render_template("error.html", message="Salasanan tulee olla 8-40 merkkiä")
 
     role = 1 if request.form.get("role") else 0
