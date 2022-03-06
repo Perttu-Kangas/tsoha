@@ -167,7 +167,7 @@ def sql_find_messages(message):
           "FROM sections S, sections_access SA, threads T, messages M " \
           "WHERE M.message LIKE :message AND M.thread_id=T.id AND T.section_id=S.id " \
           "AND (S.hidden=0 OR :user_role=1 OR :user_id" \
-          " IN (SELECT SA.user_id FROM sections_access SA WHERE SA.section_id=S.id))" \
+          " IN (SELECT SA.user_id FROM sections_access SA WHERE SA.section_id=S.id)) " \
           "ORDER BY M.sent_at DESC"
 
     result = db.session.execute(sql, {"message": "%" + message + "%", "user_id": users.user_id(),

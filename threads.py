@@ -122,7 +122,7 @@ def sql_get_threads(section_id):
           "(SELECT COUNT(M.id) FROM messages M WHERE T.id=M.thread_id), U.username, " \
           "(T.creator_id=:user_id OR :user_role>0) " \
           "FROM users U, threads T " \
-          "WHERE T.section_id=:section_id AND U.id=T.creator_id" \
+          "WHERE T.section_id=:section_id AND U.id=T.creator_id " \
           "ORDER BY T.id DESC"
 
     result = db.session.execute(sql, {"section_id": section_id, "user_id": user_id, "user_role": user_role})
