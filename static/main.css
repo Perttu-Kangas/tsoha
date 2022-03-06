@@ -25,11 +25,15 @@ body {
 .box {
     width: 100%;
     padding-bottom: 10px
-    overflow-wrap: break-word
 }
 
 .box a {
     text-decoration: underline;
+    overflow-wrap: break-word
+}
+
+.box p {
+    overflow-wrap: break-word
 }
 
 .box_title {
