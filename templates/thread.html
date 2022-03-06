@@ -10,11 +10,10 @@
             {% for message in messages %}
             <div class="box" id="{{ message[3] }}">
                 <div class="box_title">
-                    <p>{{ message[0] }}, {{ message[1] }}</p>
+                    <p>{{ message[0] }}, {{ message[1] }}, tykkäyksiä: {{ message[5] }}</p>
                 </div>
                 <div class="box_content">
-                    <p>{{ message[2] }}</p> <br>
-                    <p>Tykkäyksiä: {{ message[5] }}</p>
+                    <p>{{ message[2] }}</p>
                     {% if session.user_id %}
                     <br>
                     <ul>
